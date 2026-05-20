@@ -3,920 +3,475 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Oceano — Relatório Growth Marketing</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>K·World</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
-/* ═══ RESET & VARS ═══ */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; font-size:16px; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #080808;
+  color: #F0EDE8;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
 :root {
   --or: #FF4D00;
-  --or-dim: rgba(255,77,0,.14);
-  --or-border: rgba(255,77,0,.3);
-  --bg: #0A0A0A;
-  --s1: #111111;
-  --s2: #181818;
-  --s3: #1f1f1f;
-  --bd: rgba(255,255,255,.07);
+  --or-dim: rgba(255,77,0,.12);
+  --or-glow: rgba(255,77,0,.25);
+  --bg: #080808;
+  --s1: #101010;
+  --s2: #161616;
+  --bd: rgba(255,255,255,.06);
   --tx: #F0EDE8;
   --mt: #555;
   --dm: #888;
-  --gn: #22C55E;
-  --rd: #EF4444;
-  --pad: clamp(20px, 5vw, 56px);
-}
-body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--tx); overflow-x:hidden; }
-
-/* ═══ NAV ═══ */
-nav {
-  position:fixed; top:0; left:0; right:0; z-index:300;
-  display:flex; align-items:center; justify-content:space-between; gap:16px;
-  padding:14px var(--pad);
-  background:rgba(10,10,10,.92); backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--bd);
-}
-.nav-logo { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--dm); white-space:nowrap; }
-.nav-logo b { color:var(--or); font-weight:700; }
-.nav-links { display:flex; gap:20px; list-style:none; flex-wrap:wrap; }
-.nav-links a { font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--mt); text-decoration:none; transition:color .2s; white-space:nowrap; }
-.nav-links a:hover, .nav-links a.active { color:var(--or); }
-.nav-ham { display:none; background:none; border:none; color:var(--tx); cursor:pointer; padding:4px; }
-.nav-ham svg { width:22px; height:22px; }
-.mobile-menu { display:none; position:fixed; top:53px; left:0; right:0; background:rgba(10,10,10,.97); border-bottom:1px solid var(--bd); z-index:299; padding:20px var(--pad); flex-direction:column; gap:16px; }
-.mobile-menu a { font-size:13px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--dm); text-decoration:none; padding:8px 0; border-bottom:1px solid var(--bd); }
-.mobile-menu a:last-child { border:none; }
-.mobile-menu.open { display:flex; }
-
-/* ═══ SECTIONS ═══ */
-section { padding: clamp(90px,12vw,140px) var(--pad) clamp(60px,8vw,100px); border-bottom:1px solid var(--bd); position:relative; }
-.sec-label { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--or); margin-bottom:12px; }
-.sec-title { font-family:'Syne',sans-serif; font-size:clamp(30px,5vw,60px); font-weight:800; line-height:1.05; letter-spacing:-.025em; margin-bottom:36px; }
-.sec-hint { font-size:12px; color:var(--mt); margin-bottom:24px; letter-spacing:.03em; }
-
-/* ═══ HERO ═══ */
-#hero { min-height:100svh; display:flex; flex-direction:column; justify-content:center; overflow:hidden; }
-.hero-bg { position:absolute; inset:0; background:radial-gradient(ellipse 60% 50% at 80% 50%,rgba(255,77,0,.12) 0%,transparent 70%), radial-gradient(ellipse 40% 60% at 20% 80%,rgba(255,77,0,.06) 0%,transparent 60%); pointer-events:none; }
-.hero-grid { position:absolute; inset:0; background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px); background-size:70px 70px; mask-image:radial-gradient(ellipse 80% 80% at center,black 20%,transparent 80%); pointer-events:none; }
-.hero-ey { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--or); margin-bottom:20px; position:relative; }
-.hero-h1 { font-family:'Syne',sans-serif; font-size:clamp(52px,11vw,128px); font-weight:800; line-height:.9; letter-spacing:-.04em; margin-bottom:28px; position:relative; }
-.hero-h1 .ac { color:var(--or); }
-.hero-sub { font-size:clamp(14px,2vw,16px); color:var(--dm); max-width:460px; line-height:1.65; margin-bottom:52px; position:relative; }
-.hero-meta { display:flex; flex-wrap:wrap; gap:clamp(24px,4vw,48px); position:relative; }
-.hero-meta-label { font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--mt); margin-bottom:3px; }
-.hero-meta-val { font-family:'Syne',sans-serif; font-size:13px; font-weight:600; }
-
-/* ═══ KPI CARDS ═══ */
-.cards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr)); gap:2px; }
-.card { background:var(--s1); padding:clamp(20px,3vw,32px) clamp(16px,2.5vw,28px); position:relative; overflow:hidden; transition:background .2s; }
-.card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--or); transform:scaleX(0); transition:transform .35s; transform-origin:left; }
-.card:hover { background:var(--s2); }
-.card:hover::before { transform:scaleX(1); }
-.card.hl { background:var(--or-dim); border:1px solid var(--or-border); }
-.card.hl::before { transform:scaleX(1); }
-.card.hl .c-val { color:var(--or); }
-.c-lbl { font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--mt); margin-bottom:10px; }
-.c-val { font-family:'Syne',sans-serif; font-size:clamp(26px,3vw,36px); font-weight:800; letter-spacing:-.02em; line-height:1; margin-bottom:7px; }
-.c-delta { font-size:11px; font-weight:500; }
-.c-delta.up { color:var(--gn); } .c-delta.dn { color:var(--rd); }
-.c-sub { font-size:11px; color:var(--mt); margin-top:4px; }
-
-/* ═══ FATURAMENTO TABLE ═══ */
-.fat-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
-.fat-table { width:100%; border-collapse:collapse; min-width:600px; }
-.fat-table th { font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--mt); text-align:left; padding:0 16px 14px 0; border-bottom:1px solid var(--bd); font-weight:500; }
-.fat-table td { padding:12px 16px 12px 0; border-bottom:1px solid var(--bd); vertical-align:middle; }
-.fat-table tr:last-child td { border-bottom:none; }
-.fat-table tr.future td { opacity:.38; }
-.m-name { font-family:'Syne',sans-serif; font-weight:700; font-size:14px; white-space:nowrap; }
-.ni { /* number input */
-  font-family:'Syne',sans-serif; font-weight:700; font-size:14px;
-  background:transparent; border:1px solid transparent; color:var(--tx);
-  width:120px; padding:5px 7px; border-radius:3px;
-  transition:all .2s; outline:none; cursor:text;
-}
-.ni:hover { background:rgba(255,77,0,.07); border-color:var(--or-border); }
-.ni:focus { background:rgba(255,77,0,.1); border-color:var(--or); }
-.ni.meta { color:var(--dm); font-size:13px; }
-.ni.real { font-size:15px; }
-.ni.real.below { color:var(--rd); } .ni.real.above { color:var(--gn); } .ni.real.partial { color:var(--or); }
-.prog-row { display:flex; align-items:center; gap:10px; min-width:130px; }
-.prog-bar { height:4px; background:var(--s3); border-radius:2px; width:80px; flex-shrink:0; overflow:hidden; }
-.prog-fill { height:100%; border-radius:2px; transition:width .6s cubic-bezier(.4,0,.2,1), background .3s; }
-.prog-pct { font-family:'Syne',sans-serif; font-size:12px; font-weight:800; min-width:40px; transition:color .3s; }
-
-/* ═══ LOOKER ═══ */
-.tab-bar { display:flex; gap:2px; margin-bottom:2px; flex-wrap:wrap; }
-.t-btn { padding:9px 18px; background:var(--s1); border:none; color:var(--mt); font-family:'DM Sans',sans-serif; font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; transition:all .2s; border-bottom:2px solid transparent; }
-.t-btn:hover { color:var(--tx); background:var(--s2); }
-.t-btn.active { color:var(--or); border-bottom-color:var(--or); background:var(--s2); }
-.lk-wrap { position:relative; background:var(--s1); border:1px solid var(--bd); overflow:hidden; }
-.lk-wrap iframe { width:100%; border:none; display:block; }
-.lk-tag { position:absolute; top:10px; right:12px; font-size:8px; letter-spacing:.15em; text-transform:uppercase; color:var(--mt); background:var(--s1); padding:3px 8px; border:1px solid var(--bd); border-radius:2px; z-index:10; pointer-events:none; }
-.lk-loading { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:var(--s1); z-index:5; flex-direction:column; gap:14px; transition:opacity .4s; }
-.lk-loading.gone { opacity:0; pointer-events:none; }
-.spinner { width:28px; height:28px; border:2px solid var(--bd); border-top-color:var(--or); border-radius:50%; animation:spin .8s linear infinite; }
-@keyframes spin { to { transform:rotate(360deg); } }
-.lk-txt { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--mt); }
-.info-2 { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:12px; }
-.info-blk { background:var(--s1); padding:clamp(18px,2.5vw,28px) clamp(20px,3vw,32px); border-left:2px solid var(--or); }
-.info-blk-t { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--or); margin-bottom:8px; }
-.info-blk-d { font-size:12px; color:var(--dm); line-height:1.7; }
-
-/* ═══ FUNIL ═══ */
-.funil-wrap { display:flex; flex-direction:column; gap:3px; }
-.funil-step { display:flex; align-items:center; gap:clamp(10px,2vw,20px); }
-.funil-bar-bg { flex:1; height:52px; background:var(--s2); border-radius:2px; overflow:hidden; position:relative; min-width:0; }
-.funil-bar { height:100%; background:var(--or-dim); border-right:3px solid var(--or); display:flex; align-items:center; padding-left:14px; transition:width .8s cubic-bezier(.4,0,.2,1); min-width:6px; }
-.funil-bar-lbl { font-family:'Syne',sans-serif; font-size:clamp(11px,1.5vw,13px); font-weight:600; white-space:nowrap; pointer-events:none; }
-.funil-right { display:flex; flex-direction:column; align-items:flex-end; gap:3px; flex-shrink:0; width:clamp(140px,22vw,220px); }
-.funil-pct { font-family:'Syne',sans-serif; font-size:clamp(16px,2.5vw,22px); font-weight:800; color:var(--or); }
-.funil-num-row { display:flex; align-items:center; gap:6px; }
-.funil-num-lbl { font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--mt); }
-.fi { /* funil input */
-  font-family:'Syne',sans-serif; font-weight:700; font-size:13px;
-  background:transparent; border:1px solid transparent; color:var(--tx);
-  width:80px; padding:3px 7px; border-radius:3px; outline:none;
-  text-align:center; transition:all .2s;
-}
-.fi:hover { background:rgba(255,77,0,.07); border-color:var(--or-border); }
-.fi:focus { background:rgba(255,77,0,.1); border-color:var(--or); }
-.funil-aband { font-size:10px; color:var(--mt); }
-.gargalo { margin-top:28px; padding:clamp(16px,2.5vw,24px) clamp(18px,3vw,28px); background:var(--s1); border-left:3px solid var(--or); }
-.gargalo-t { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--or); margin-bottom:8px; }
-.gargalo-d { font-size:13px; color:var(--dm); line-height:1.6; }
-
-/* ═══ COLLABS ═══ */
-.collabs-header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
-.collabs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr)); gap:2px; margin-bottom:16px; }
-.collab-card { background:var(--s1); padding:clamp(24px,3.5vw,40px); position:relative; overflow:hidden; transition:background .2s; }
-.collab-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--or),transparent); }
-.collab-card:hover { background:var(--s2); }
-.collab-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:8px; }
-.collab-name { font-family:'Syne',sans-serif; font-size:clamp(16px,2.5vw,22px); font-weight:800; outline:none; border-radius:2px; }
-.collab-name:hover { background:rgba(255,77,0,.07); }
-.collab-name:focus { background:rgba(255,77,0,.1); box-shadow:0 0 0 1px var(--or); }
-.collab-role { font-size:10px; color:var(--mt); margin-bottom:28px; letter-spacing:.05em; outline:none; }
-.collab-role:hover { background:rgba(255,77,0,.07); border-radius:2px; }
-.collab-role:focus { background:rgba(255,77,0,.1); border-radius:2px; }
-.del-btn { background:none; border:1px solid var(--bd); color:var(--mt); font-size:11px; padding:4px 10px; border-radius:2px; cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0; }
-.del-btn:hover { border-color:var(--rd); color:var(--rd); }
-.collab-stats { display:grid; grid-template-columns:1fr 1fr; gap:clamp(12px,2vw,20px); }
-.cs-lbl { font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--mt); margin-bottom:5px; }
-.cs-val { font-family:'Syne',sans-serif; font-size:clamp(18px,2.5vw,26px); font-weight:800; letter-spacing:-.02em; outline:none; border-radius:2px; }
-.cs-val:hover { background:rgba(255,77,0,.07); }
-.cs-val:focus { background:rgba(255,77,0,.1); box-shadow:0 0 0 1px var(--or); }
-.cs-computed { font-family:'Syne',sans-serif; font-size:clamp(18px,2.5vw,24px); font-weight:800; color:var(--or); }
-
-/* Collab calculada */
-.cs-formula { font-size:9px; color:var(--mt); margin-top:3px; letter-spacing:.04em; }
-
-/* Add collab btn */
-.add-collab-btn {
-  display:flex; align-items:center; gap:10px;
-  background:none; border:1px dashed var(--or-border); color:var(--or);
-  font-family:'Syne',sans-serif; font-size:11px; font-weight:700;
-  letter-spacing:.1em; text-transform:uppercase;
-  padding:14px 24px; cursor:pointer; width:100%;
-  transition:all .2s;
-}
-.add-collab-btn:hover { background:var(--or-dim); border-color:var(--or); }
-
-/* ═══ PRODUTOS ═══ */
-.prod-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
-.prod-header { display:grid; grid-template-columns:28px 1fr repeat(3,80px) 120px; gap:12px; padding:0 20px 10px; min-width:560px; }
-.prod-header span { font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--mt); text-align:right; }
-.prod-header span:nth-child(2) { text-align:left; }
-.prod-list { display:flex; flex-direction:column; gap:2px; min-width:560px; }
-.prod-row { display:grid; grid-template-columns:28px 1fr repeat(3,80px) 120px; align-items:center; gap:12px; background:var(--s1); padding:14px 20px; transition:background .15s; }
-.prod-row:hover { background:var(--s2); }
-.p-rank { font-family:'Syne',sans-serif; font-size:11px; font-weight:800; color:var(--mt); }
-.prod-row.top .p-rank { color:var(--or); }
-.p-name { font-size:13px; font-weight:500; line-height:1.3; outline:none; }
-.p-name:focus { background:rgba(255,77,0,.08); border-radius:2px; }
-.p-stat { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; text-align:right; outline:none; }
-.p-stat:focus { background:rgba(255,77,0,.08); border-radius:2px; }
-.p-rev { font-family:'Syne',sans-serif; font-size:14px; font-weight:800; color:var(--or); text-align:right; outline:none; }
-.p-rev:focus { background:rgba(255,77,0,.08); border-radius:2px; }
-
-/* ═══ STEPS ═══ */
-.steps-list { display:flex; flex-direction:column; gap:2px; max-width:860px; }
-.step { background:var(--s1); padding:clamp(18px,2.5vw,28px) clamp(20px,3.5vw,36px); display:flex; gap:clamp(16px,2vw,28px); align-items:flex-start; transition:background .15s; }
-.step:hover { background:var(--s2); }
-.s-num { font-family:'Syne',sans-serif; font-size:11px; font-weight:800; color:var(--or); letter-spacing:.1em; padding-top:2px; flex-shrink:0; }
-.s-title { font-family:'Syne',sans-serif; font-size:clamp(14px,2vw,16px); font-weight:700; margin-bottom:5px; outline:none; border-radius:2px; }
-.s-title:focus { background:rgba(255,77,0,.08); }
-.s-desc { font-size:13px; color:var(--dm); line-height:1.6; outline:none; border-radius:2px; }
-.s-desc:focus { background:rgba(255,77,0,.06); }
-
-/* ═══ STATUS BADGE ═══ */
-.badge { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; border-radius:2px; margin-bottom:20px; }
-.badge.live { background:rgba(34,197,94,.12); color:var(--gn); border:1px solid rgba(34,197,94,.3); }
-.badge.manual { background:var(--or-dim); color:var(--or); border:1px solid var(--or-border); }
-.sdot { width:6px; height:6px; border-radius:50%; background:currentColor; animation:pulse 2s infinite; flex-shrink:0; }
-@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
-
-/* ═══ FOOTER ═══ */
-footer { padding:clamp(24px,4vw,48px) var(--pad); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid var(--bd); }
-.f-logo { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--mt); }
-.f-logo b { color:var(--or); }
-.f-note { font-size:11px; color:var(--mt); outline:none; border-radius:2px; }
-.f-note:focus { background:rgba(255,77,0,.07); }
-
-/* ═══ EDITABLE ═══ */
-[contenteditable] { outline:none; cursor:text; transition:background .15s; border-radius:2px; }
-[contenteditable]:hover { background:rgba(255,77,0,.06); }
-[contenteditable]:focus { background:rgba(255,77,0,.1); box-shadow:0 0 0 1px rgba(255,77,0,.4); }
-
-/* ═══ FADE ANIM ═══ */
-.fu { opacity:0; transform:translateY(14px); transition:opacity .4s ease, transform .4s ease; }
-.fu.in { opacity:1; transform:none; }
-
-/* ═══ RESPONSIVE ═══ */
-@media (max-width: 768px) {
-  .nav-links { display:none; }
-  .nav-ham { display:block; }
-  .info-2 { grid-template-columns:1fr; }
-  .collabs-grid { grid-template-columns:1fr; }
-  .funil-bar-lbl { font-size:10px; }
-  .funil-right { width:120px; }
-  .hero-meta { gap:20px; }
-}
-@media (max-width: 480px) {
-  .cards-grid { grid-template-columns:1fr 1fr; }
-  .c-val { font-size:22px; }
-  .funil-bar-lbl { display:none; }
-  .funil-bar-bg { height:42px; }
-  .funil-right { width:100px; }
-  .fi { width:68px; font-size:12px; }
 }
 
-/* ═══ HUB DE APPS ═══ */
-#hub { min-height:100svh; display:flex; flex-direction:column; justify-content:center; }
-.hub-eyebrow { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--or); margin-bottom:20px; position:relative; }
-.hub-title { font-family:'Syne',sans-serif; font-size:clamp(32px,6vw,72px); font-weight:800; line-height:.95; letter-spacing:-.035em; margin-bottom:20px; position:relative; }
-.hub-sub { font-size:14px; color:var(--dm); margin-bottom:52px; max-width:440px; line-height:1.65; position:relative; }
-.hub-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr)); gap:2px; position:relative; }
-.hub-card { display:flex; flex-direction:column; background:var(--s1); padding:clamp(24px,3.5vw,40px); color:var(--tx); transition:background .2s; position:relative; overflow:hidden; }
-.hub-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--or); transform:scaleX(0); transition:transform .35s; transform-origin:left; }
-.hub-card:hover { background:var(--s2); }
-.hub-card:hover::before { transform:scaleX(1); }
-.hub-card.current { border-left:2px solid var(--or); }
-.hub-card.current::before { transform:scaleX(1); }
-.hub-card-num { font-family:'Syne',sans-serif; font-size:9px; font-weight:700; letter-spacing:.18em; color:var(--mt); margin-bottom:28px; text-transform:uppercase; }
-.hub-card-name { font-family:'Syne',sans-serif; font-size:clamp(18px,2.5vw,24px); font-weight:800; letter-spacing:-.02em; margin-bottom:10px; }
-.hub-card-desc { font-size:12px; color:var(--dm); line-height:1.65; flex:1; margin-bottom:32px; }
-.hub-card-link { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--or); text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:gap .2s; width:fit-content; }
-.hub-card:hover .hub-card-link { gap:12px; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.animate-up {
+  animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
 </style>
 </head>
 <body>
+<div id="root"></div>
 
-<!-- ═══ NAV ═══ -->
-<nav>
-  <div class="nav-logo">grupo <b>·</b> hapo</div>
-  <ul class="nav-links">
-    <li><a href="#hub">Apps</a></li>
-    <li><a href="#hero">Início</a></li>
-    <li><a href="#visao">Visão</a></li>
-    <li><a href="#fat">Faturamento</a></li>
-    <li><a href="#perf">Performance</a></li>
-    <li><a href="#funil">Funil</a></li>
-    <li><a href="#prod">Produtos</a></li>
-    <li><a href="#collabs">Collabs</a></li>
-    <li><a href="#prox">Próximos</a></li>
-  </ul>
-  <button class="nav-ham" onclick="toggleMenu()" aria-label="Menu">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
-</nav>
-<div class="mobile-menu" id="mob-menu">
-  <a href="#hub" onclick="closeMenu()">Apps</a>
-  <a href="#hero" onclick="closeMenu()">Início</a>
-  <a href="#visao" onclick="closeMenu()">Visão Geral</a>
-  <a href="#fat" onclick="closeMenu()">Faturamento</a>
-  <a href="#perf" onclick="closeMenu()">Performance</a>
-  <a href="#funil" onclick="closeMenu()">Funil</a>
-  <a href="#prod" onclick="closeMenu()">Produtos</a>
-  <a href="#collabs" onclick="closeMenu()">Collabs</a>
-  <a href="#prox" onclick="Próximos Passos">Próximos</a>
-</div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
 
-<!-- ═══ HUB DE APPS ═══ -->
-<section id="hub">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hub-eyebrow">K · World</div>
-  <h2 class="hub-title">Suas<br><span style="color:var(--or)">Aplicações</span></h2>
-  <p class="hub-sub">Acesse qualquer app em um clique. Todas as suas ferramentas, centralizadas aqui.</p>
-  <div class="hub-grid">
-
-    <div class="hub-card fu">
-      <div class="hub-card-num">01 · App</div>
-      <div class="hub-card-name">fourseconds</div>
-      <div class="hub-card-desc">Aplicação web disponível online.</div>
-      <a href="https://kvothedarinha.github.io/fourseconds" target="_blank" rel="noopener" class="hub-card-link">
-        Acessar
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-    </div>
-
-    <div class="hub-card fu">
-      <div class="hub-card-num">02 · App</div>
-      <div class="hub-card-name">highmarketing</div>
-      <div class="hub-card-desc">Aplicação web disponível online.</div>
-      <a href="https://kvothedarinha.github.io/highmarketing" target="_blank" rel="noopener" class="hub-card-link">
-        Acessar
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-    </div>
-
-    <div class="hub-card fu">
-      <div class="hub-card-num">03 · App</div>
-      <div class="hub-card-name">pontodasrimas</div>
-      <div class="hub-card-desc">Aplicação web disponível online.</div>
-      <a href="https://kvothedarinha.github.io/pontodasrimas" target="_blank" rel="noopener" class="hub-card-link">
-        Acessar
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-    </div>
-
-    <div class="hub-card current fu">
-      <div class="hub-card-num">04 · Relatório</div>
-      <div class="hub-card-name">Oceano Surfwear</div>
-      <div class="hub-card-desc">Relatório de Growth Marketing — você já está aqui.</div>
-      <a href="#hero" class="hub-card-link" style="color:var(--tx)">
-        Ver relatório
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 19 19 12"/></svg>
-      </a>
-    </div>
-
-  </div>
-</section>
-
-<!-- ═══ HERO ═══ -->
-<section id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-ey">Relatório de Growth Marketing</div>
-  <h1 class="hero-h1">
-    <span contenteditable="true">Oceano</span><br>
-    <span class="ac" contenteditable="true">Surfwear</span>
-  </h1>
-  <p class="hero-sub" contenteditable="true">Resultados consolidados de tráfego pago, e-commerce e collabs.</p>
-  <div class="hero-meta">
-    <div><div class="hero-meta-label">Período</div><div class="hero-meta-val" contenteditable="true">Abril 2026</div></div>
-    <div><div class="hero-meta-label">Cliente</div><div class="hero-meta-val" contenteditable="true">Oceano.com.br</div></div>
-    <div><div class="hero-meta-label">Agência</div><div class="hero-meta-val">Grupo Hapo</div></div>
-    <div><div class="hero-meta-label">Plataformas</div><div class="hero-meta-val">Meta + Google Ads</div></div>
-  </div>
-</section>
-
-<!-- ═══ VISÃO EXECUTIVA ═══ -->
-<section id="visao">
-  <div class="sec-label">01 — Visão Executiva</div>
-  <h2 class="sec-title">Os números<br>que importam</h2>
-  <div class="cards-grid" id="kpi-grid">
-    <div class="card hl fu"><div class="c-lbl">Receita Total</div><div class="c-val" contenteditable="true">R$ 46k</div><div class="c-delta up" contenteditable="true">↑ 173% vs março</div><div class="c-sub" contenteditable="true">Meta: R$ 62.039</div></div>
-    <div class="card fu"><div class="c-lbl">ROI Geral</div><div class="c-val" contenteditable="true">9,91</div><div class="c-delta up" contenteditable="true">↑ 44,3% vs março</div><div class="c-sub">R$ retornado por R$1</div></div>
-    <div class="card fu"><div class="c-lbl">Investimento</div><div class="c-val" contenteditable="true">R$ 3.327</div><div class="c-delta up" contenteditable="true">↑ 353% vs março</div><div class="c-sub">Meta + Google Ads</div></div>
-    <div class="card fu"><div class="c-lbl">Compras</div><div class="c-val" contenteditable="true">140</div><div class="c-delta up" contenteditable="true">↑ 150,5% vs março</div><div class="c-sub">E-commerce total</div></div>
-    <div class="card fu"><div class="c-lbl">Impressões</div><div class="c-val" contenteditable="true">613k</div><div class="c-delta up" contenteditable="true">↑ 583% vs março</div><div class="c-sub">Ambas plataformas</div></div>
-    <div class="card fu"><div class="c-lbl">Taxa de Conversão</div><div class="c-val" contenteditable="true">34,94%</div><div class="c-delta up" contenteditable="true">↑ 89,7% vs março</div><div class="c-sub">Geral consolidado</div></div>
-  </div>
-</section>
-
-<!-- ═══ FATURAMENTO ═══ -->
-<section id="fat">
-  <div class="sec-label">02 — Faturamento</div>
-  <h2 class="sec-title">Realizado vs<br>Meta 2026</h2>
-  <p class="sec-hint">✏️ Edite Meta ou Realizado — a barra e % atualizam sozinhos.</p>
-  <div class="fat-scroll">
-    <table class="fat-table">
-      <thead>
-        <tr>
-          <th>Mês</th>
-          <th>Fat. 2025</th>
-          <th>Meta 2026</th>
-          <th>Realizado 2026</th>
-          <th>% da Meta</th>
-        </tr>
-      </thead>
-      <tbody id="fat-body"></tbody>
-    </table>
-  </div>
-</section>
-
-<!-- ═══ PERFORMANCE LOOKER ═══ -->
-<section id="perf">
-  <div class="sec-label">03 — Performance Paga</div>
-  <h2 class="sec-title">Meta Ads +<br>Google Ads</h2>
-  <div class="badge live"><div class="sdot"></div>Dados ao vivo · Looker Studio</div>
-  <div class="tab-bar">
-    <button class="t-btn active" onclick="showTab('vg',this)">Visão Geral</button>
-    <button class="t-btn" onclick="showTab('meta',this)">Meta Ads</button>
-    <button class="t-btn" onclick="showTab('google',this)">Google Ads</button>
-  </div>
-  <div id="tab-vg" class="lk-wrap" style="height:clamp(380px,55vw,620px)">
-    <div class="lk-tag">Live · Looker Studio</div>
-    <div class="lk-loading" id="ll-vg"><div class="spinner"></div><div class="lk-txt">Carregando...</div></div>
-    <iframe src="https://lookerstudio.google.com/embed/reporting/69eca118-1884-44f9-9b48-5fe7e2209218/page/p_visao" style="height:clamp(380px,55vw,620px)" allowfullscreen onload="hideLL('ll-vg')"></iframe>
-  </div>
-  <div id="tab-meta" class="lk-wrap" style="height:clamp(380px,55vw,620px);display:none">
-    <div class="lk-tag">Live · Looker Studio</div>
-    <div class="lk-loading" id="ll-meta"><div class="spinner"></div><div class="lk-txt">Carregando Meta Ads...</div></div>
-    <iframe data-src="https://lookerstudio.google.com/embed/reporting/69eca118-1884-44f9-9b48-5fe7e2209218/page/p_meta" style="height:clamp(380px,55vw,620px)" allowfullscreen onload="hideLL('ll-meta')"></iframe>
-  </div>
-  <div id="tab-google" class="lk-wrap" style="height:clamp(380px,55vw,620px);display:none">
-    <div class="lk-tag">Live · Looker Studio</div>
-    <div class="lk-loading" id="ll-google"><div class="spinner"></div><div class="lk-txt">Carregando Google Ads...</div></div>
-    <iframe data-src="https://lookerstudio.google.com/embed/reporting/69eca118-1884-44f9-9b48-5fe7e2209218/page/p_google" style="height:clamp(380px,55vw,620px)" allowfullscreen onload="hideLL('ll-google')"></iframe>
-  </div>
-  <div class="info-2">
-    <div class="info-blk"><div class="info-blk-t">Como funciona</div><div class="info-blk-d">Painel conectado ao Looker Studio. Dados atualizam automaticamente via Meta Ads e Google Ads — sem ação manual.</div></div>
-    <div class="info-blk"><div class="info-blk-t">Filtro de período</div><div class="info-blk-d">Use os filtros de data dentro do painel para mudar o intervalo. Todas as abas refletem as interações.</div></div>
-  </div>
-</section>
-
-<!-- ═══ FUNIL ═══ -->
-<section id="funil">
-  <div class="sec-label">04 — Jornada de Compra</div>
-  <h2 class="sec-title">Funil de<br>Conversão</h2>
-  <p class="sec-hint">✏️ Edite as sessões de cada etapa — barras e % atualizam em tempo real.</p>
-  <div class="funil-wrap" id="funil-wrap"></div>
-  <div class="gargalo">
-    <div class="gargalo-t">Maior Gargalo</div>
-    <div class="gargalo-d" id="gargalo-txt">—</div>
-  </div>
-</section>
-
-<!-- ═══ PRODUTOS ═══ -->
-<section id="prod">
-  <div class="sec-label">05 — Produtos</div>
-  <h2 class="sec-title">Top Produtos<br>por Receita</h2>
-  <div class="prod-scroll">
-    <div class="prod-header">
-      <span></span><span style="text-align:left">Produto</span>
-      <span>Vistos</span><span>Carrinho</span><span>Vendidos</span><span>Receita</span>
-    </div>
-    <div class="prod-list" id="prod-list"></div>
-  </div>
-</section>
-
-<!-- ═══ COLLABS ═══ -->
-<section id="collabs">
-  <div class="sec-label">06 — Collabs</div>
-  <h2 class="sec-title">Influenciadores<br>&amp; Parcerias</h2>
-  <p class="sec-hint">✏️ Edite alcance, cliques e gasto — CPL e eficiência calculados automaticamente. Use + para adicionar collabs.</p>
-  <div class="collabs-grid" id="collabs-grid"></div>
-  <button class="add-collab-btn" onclick="addCollab()">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Adicionar Collab
-  </button>
-</section>
-
-<!-- ═══ PRÓXIMOS PASSOS ═══ -->
-<section id="prox">
-  <div class="sec-label">07 — Próximos Passos</div>
-  <h2 class="sec-title">O que vem<br>a seguir</h2>
-  <div class="steps-list">
-    <div class="step fu"><div class="s-num">01</div><div><div class="s-title" contenteditable="true">Otimizar página de produto</div><div class="s-desc" contenteditable="true">Taxa de add ao carrinho em 9,2% — abaixo do benchmark de moda (14–18%). Testar novas fotos, descrições e social proof.</div></div></div>
-    <div class="step fu"><div class="s-num">02</div><div><div class="s-title" contenteditable="true">Escalar campanha de remarketing</div><div class="s-desc" contenteditable="true">Remarketing Geral responsável por 41 de 60 compras no Meta. Aumentar orçamento e testar lookalikes.</div></div></div>
-    <div class="step fu"><div class="s-num">03</div><div><div class="s-title" contenteditable="true">Expandir portfólio de collabs</div><div class="s-desc" contenteditable="true">32k de alcance com R$ 400 investidos. Identificar novos perfis surf e outdoor para escalar.</div></div></div>
-    <div class="step fu"><div class="s-num">04</div><div><div class="s-title" contenteditable="true">Recuperação de carrinho abandonado</div><div class="s-desc" contenteditable="true">73,4% de abandono no pagamento. Implementar fluxo de e-mail/SMS — potencial de recuperar 15–20% das vendas perdidas.</div></div></div>
-    <div class="step fu" style="opacity:.45"><div class="s-num">05</div><div><div class="s-title" contenteditable="true">[Adicionar próximo passo]</div><div class="s-desc" contenteditable="true">Descreva aqui a próxima ação estratégica...</div></div></div>
-  </div>
-</section>
-
-<footer>
-  <div class="f-logo">grupo <b>·</b> hapo</div>
-  <div class="f-note" contenteditable="true">Relatório confidencial · Oceano Surfwear · Abril 2026</div>
-</footer>
-
-<script>
-'use strict';
-
-/* ═══════════════════════════════════
-   UTILS
-═══════════════════════════════════ */
-const $ = id => document.getElementById(id);
-const fmtBRL = n => n > 0 ? 'R$ ' + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-const parseMoney = s => parseFloat((s||'').replace(/[^\d,\.]/g,'').replace(',','.')) || 0;
-const clamp = (v,min,max) => Math.min(Math.max(v,min),max);
-const ls = { get:(k,d)=>{ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch{return d;} }, set:(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} } };
-
-/* ═══════════════════════════════════
-   DATA DEFAULTS
-═══════════════════════════════════ */
-const FAT_DEF = [
-  {m:'Janeiro',   f2025:18180.41, meta:26582.97,  real:19979.40, done:true},
-  {m:'Fevereiro', f2025:28945.19, meta:39737.83,  real:23907.22, done:true},
-  {m:'Março',     f2025:41202.44, meta:58572.83,  real:27680.19, done:true},
-  {m:'Abril',     f2025:58428.52, meta:62039.25,  real:46091.90, done:true},
-  {m:'Maio',      f2025:37295.80, meta:86934.83,  real:10477.88, done:true},
-  {m:'Junho',     f2025:43860.70, meta:100546.41, real:0,        done:false},
-  {m:'Julho',     f2025:32518.24, meta:85500.73,  real:0,        done:false},
-  {m:'Agosto',    f2025:34125.67, meta:65517.15,  real:0,        done:false},
-  {m:'Setembro',  f2025:41831.20, meta:73789.74,  real:0,        done:false},
-  {m:'Outubro',   f2025:38144.54, meta:62428.89,  real:0,        done:false},
-  {m:'Novembro',  f2025:88461.91, meta:183511.46, real:0,        done:false},
-  {m:'Dezembro',  f2025:48454.54, meta:86331.98,  real:0,        done:false},
+/* ── APPS DATA ───────────────────────────────────────────── */
+const APPS = [
+  {
+    id: 1,
+    slug: 'fourseconds',
+    name: 'fourseconds',
+    tag: 'App',
+    desc: 'Aplicação web disponível online.',
+    url: 'https://kvothedarinha.github.io/fourseconds',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    ),
+  },
+  {
+    id: 2,
+    slug: 'highmarketing',
+    name: 'highmarketing',
+    tag: 'Marketing',
+    desc: 'Aplicação web disponível online.',
+    url: 'https://kvothedarinha.github.io/highmarketing',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+        <polyline points="16 7 22 7 22 13"/>
+      </svg>
+    ),
+  },
+  {
+    id: 3,
+    slug: 'pontodasrimas',
+    name: 'pontodasrimas',
+    tag: 'Criativo',
+    desc: 'Aplicação web disponível online.',
+    url: 'https://kvothedarinha.github.io/pontodasrimas',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+        <path d="M9 18V5l12-2v13"/>
+        <circle cx="6" cy="18" r="3"/>
+        <circle cx="18" cy="16" r="3"/>
+      </svg>
+    ),
+  },
+  {
+    id: 4,
+    slug: 'oceano',
+    name: 'Oceano Surfwear',
+    tag: 'Relatório',
+    desc: 'Relatório de Growth Marketing — Abril 2026.',
+    url: './relatorio-oceano.html',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+        <path d="M2 12c2-4 6-4 8 0s6 4 8 0"/>
+        <path d="M2 18c2-4 6-4 8 0s6 4 8 0"/>
+        <path d="M2 6c2-4 6-4 8 0s6 4 8 0"/>
+      </svg>
+    ),
+  },
 ];
 
-const FUNIL_DEF = [
-  {label:'Início de Sessão', sessions:4600},
-  {label:'Conferir Produto', sessions:2364},
-  {label:'Add ao Carrinho',  sessions:217},
-  {label:'Iniciar Pagamento',sessions:79},
-  {label:'Comprar',          sessions:21},
-];
+/* ── CLOCK ───────────────────────────────────────────────── */
+function Clock() {
+  const [time, setTime] = useState(new Date());
+  useEffect(() => {
+    const t = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
 
-const PROD_DEF = [
-  {nome:'Calça Jeans Slim Oceano Denim Malha',        vistos:251,carrinho:7, vendidos:4,receita:1379.60},
-  {nome:'Blusão Oceano Canguru Oversized',            vistos:177,carrinho:11,vendidos:4,receita:1159.60},
-  {nome:'Camiseta Plus Size Oceano Relevo Tech Gold', vistos:145,carrinho:25,vendidos:8,receita:1119.20},
-  {nome:'Calça Oceano Feminina Skinny Jogger',        vistos:181,carrinho:22,vendidos:5,receita:1099.60},
-  {nome:'Camiseta Oceano Relevo Use Mais, Lave Menos',vistos:489,carrinho:43,vendidos:9,receita:1049.13},
-  {nome:'Camiseta Plus Size Oceano Logo Malha',       vistos:59, carrinho:18,vendidos:9,receita:959.20},
-  {nome:'Calça Jeans Feminina Cigarrete Triple Dry',  vistos:37, carrinho:6, vendidos:3,receita:929.70},
-];
+  const h = String(time.getHours()).padStart(2, '0');
+  const m = String(time.getMinutes()).padStart(2, '0');
+  const s = String(time.getSeconds()).padStart(2, '0');
 
-const COLLABS_DEF = [
-  {id:1,nome:'Super Wind',role:'Colab 1 · Tráfego de Perfil',alcance:10087,cliques:636, gasto:200,videoView:887},
-  {id:2,nome:'Gut & Top',  role:'Colab 2 · Tráfego de Perfil',alcance:22365,cliques:1517,gasto:200,videoView:2400},
-];
-
-let fatData    = ls.get('fat_v2',    FAT_DEF);
-let funilData  = ls.get('funil_v2',  FUNIL_DEF);
-let prodData   = ls.get('prod_v2',   PROD_DEF);
-let collabData = ls.get('collab_v2', COLLABS_DEF);
-let nextId     = ls.get('collab_nid', 3);
-
-/* ═══════════════════════════════════
-   FATURAMENTO
-═══════════════════════════════════ */
-function fatColor(pct) {
-  if (pct >= 100) return 'var(--gn)';
-  if (pct >= 65)  return 'var(--or)';
-  return 'var(--rd)';
-}
-function fatRealClass(pct, done) {
-  if (!done && pct === 0) return '';
-  if (pct >= 100) return 'above';
-  if (pct >= 65)  return 'partial';
-  return 'below';
+  return (
+    <span style={{
+      fontFamily: "'Syne', sans-serif",
+      fontSize: 13,
+      fontWeight: 700,
+      letterSpacing: '0.08em',
+      color: 'var(--dm)',
+    }}>
+      {h}<span style={{ opacity: 0.4, animation: 'pulse 1s infinite' }}>:</span>
+      {m}<span style={{ opacity: 0.4, animation: 'pulse 1s infinite' }}>:</span>
+      {s}
+    </span>
+  );
 }
 
-function updateFatRow(idx) {
-  const d = fatData[idx];
-  const rawPct = d.meta > 0 ? (d.real / d.meta) * 100 : 0;
-  const pctDisp = rawPct.toFixed(1);
-  const barW = clamp(rawPct, 0, 100);
-  const color = fatColor(rawPct);
+/* ── APP CARD ─────────────────────────────────────────────── */
+function AppCard({ app, index }) {
+  const [hovered, setHovered] = useState(false);
+  const [pressed, setPressed] = useState(false);
 
-  const fill = $(`ff-${idx}`);
-  const pctEl = $(`fp-${idx}`);
-  const realIn = $(`fr-${idx}`);
-  if (fill)  { fill.style.width = barW + '%'; fill.style.background = color; }
-  if (pctEl) { pctEl.textContent = pctDisp + '%'; pctEl.style.color = color; }
-  if (realIn) {
-    realIn.className = 'ni real ' + fatRealClass(rawPct, d.done);
-  }
-}
+  const delay = `${0.08 + index * 0.07}s`;
 
-function renderFat() {
-  const tb = $('fat-body');
-  tb.innerHTML = '';
-  fatData.forEach((d, idx) => {
-    const rawPct = d.meta > 0 ? (d.real / d.meta) * 100 : 0;
-    const pctDisp = rawPct.toFixed(1);
-    const barW = clamp(rawPct, 0, 100);
-    const color = fatColor(rawPct);
-    const realClass = fatRealClass(rawPct, d.done);
-    const future = !d.done && d.real === 0;
+  return (
+    <a
+      href={app.url}
+      target={app.url.startsWith('http') ? '_blank' : '_self'}
+      rel="noopener noreferrer"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => { setHovered(false); setPressed(false); }}
+      onMouseDown={() => setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      className="animate-up"
+      style={{
+        animationDelay: delay,
+        display: 'flex',
+        flexDirection: 'column',
+        textDecoration: 'none',
+        color: 'inherit',
+        background: hovered ? 'var(--s2)' : 'var(--s1)',
+        border: `1px solid ${hovered ? 'rgba(255,77,0,.3)' : 'var(--bd)'}`,
+        borderRadius: 2,
+        padding: 'clamp(28px, 4vw, 44px)',
+        position: 'relative',
+        overflow: 'hidden',
+        transform: pressed ? 'scale(0.985)' : 'scale(1)',
+        transition: 'background 0.2s, border-color 0.2s, transform 0.12s, box-shadow 0.3s',
+        boxShadow: hovered ? '0 0 0 1px rgba(255,77,0,.15), 0 20px 60px rgba(0,0,0,.4)' : 'none',
+        cursor: 'pointer',
+      }}
+    >
+      {/* Top bar */}
+      <div style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0,
+        height: 2,
+        background: 'var(--or)',
+        transform: `scaleX(${hovered ? 1 : 0})`,
+        transformOrigin: 'left',
+        transition: 'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
+      }} />
 
-    const tr = document.createElement('tr');
-    if (future) tr.className = 'future';
-    tr.innerHTML = `
-      <td class="m-name">${d.m}</td>
-      <td><input class="ni" id="f25-${idx}" value="${fmtBRL(d.f2025)}"
-        onchange="fatData[${idx}].f2025=parseMoney(this.value);ls.set('fat_v2',fatData)"
-        onblur="this.value=fmtBRL(fatData[${idx}].f2025)"></td>
-      <td><input class="ni meta" id="fm-${idx}" value="${fmtBRL(d.meta)}"
-        onchange="fatData[${idx}].meta=parseMoney(this.value);ls.set('fat_v2',fatData);updateFatRow(${idx})"
-        onblur="this.value=fmtBRL(fatData[${idx}].meta)"></td>
-      <td><input class="ni real ${realClass}" id="fr-${idx}"
-        value="${d.real > 0 ? fmtBRL(d.real) : (future ? '' : '—')}"
-        placeholder="R$ 0,00"
-        onchange="fatData[${idx}].real=parseMoney(this.value);fatData[${idx}].done=true;ls.set('fat_v2',fatData);updateFatRow(${idx})"
-        onblur="this.value=fatData[${idx}].real>0?fmtBRL(fatData[${idx}].real):'—'"></td>
-      <td>
-        <div class="prog-row">
-          <div class="prog-bar"><div class="prog-fill" id="ff-${idx}" style="width:${barW}%;background:${color}"></div></div>
-          <span class="prog-pct" id="fp-${idx}" style="color:${color}">${pctDisp}%</span>
+      {/* Glow */}
+      {hovered && (
+        <div style={{
+          position: 'absolute',
+          top: -60, right: -60,
+          width: 180, height: 180,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,77,0,.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+      )}
+
+      {/* Header row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 44, height: 44,
+          background: hovered ? 'var(--or-dim)' : 'rgba(255,255,255,.04)',
+          border: `1px solid ${hovered ? 'rgba(255,77,0,.3)' : 'var(--bd)'}`,
+          borderRadius: 2,
+          color: hovered ? 'var(--or)' : 'var(--dm)',
+          transition: 'background 0.2s, color 0.2s, border-color 0.2s',
+        }}>
+          {app.icon}
         </div>
-      </td>`;
-    tb.appendChild(tr);
-  });
-}
-
-/* ═══════════════════════════════════
-   FUNIL
-═══════════════════════════════════ */
-function renderFunil() {
-  const wrap = $('funil-wrap');
-  wrap.innerHTML = '';
-  const total = funilData[0].sessions || 1;
-
-  funilData.forEach((step, idx) => {
-    const pct = (step.sessions / total) * 100;
-    const pctDisp = idx === 0 ? '100.0' : pct.toFixed(1);
-    const barW = Math.max(0.5, pct);
-
-    const div = document.createElement('div');
-    div.className = 'funil-step fu';
-    div.innerHTML = `
-      <div class="funil-bar-bg">
-        <div class="funil-bar" id="fb-${idx}" style="width:${barW}%">
-          <span class="funil-bar-lbl">${step.label}</span>
-        </div>
+        <span style={{
+          fontFamily: "'Syne', sans-serif",
+          fontSize: 9,
+          fontWeight: 700,
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          color: hovered ? 'var(--or)' : 'var(--mt)',
+          transition: 'color 0.2s',
+        }}>
+          {String(app.id).padStart(2, '0')} · {app.tag}
+        </span>
       </div>
-      <div class="funil-right">
-        <div class="funil-num-row">
-          <div class="funil-num-lbl">Sessões</div>
-          <input class="fi" id="fs-${idx}" type="number" value="${step.sessions}" min="0"
-            oninput="funilData[${idx}].sessions=parseInt(this.value)||0;ls.set('funil_v2',funilData);updateFunil()">
-        </div>
-        <div class="funil-pct" id="fpct-${idx}">${pctDisp}%</div>
-        ${idx > 0
-          ? `<div class="funil-aband" id="fab-${idx}">↓ ${(100 - parseFloat(pctDisp)).toFixed(1)}% abandono</div>`
-          : `<div class="funil-aband">etapa inicial</div>`}
-      </div>`;
-    wrap.appendChild(div);
-  });
 
-  updateGargalo();
-  setTimeout(() => wrap.querySelectorAll('.fu').forEach((el,i) => setTimeout(() => el.classList.add('in'), i*60)), 50);
-}
-
-function updateFunil() {
-  const total = funilData[0].sessions || 1;
-  funilData.forEach((step, idx) => {
-    const pct = (step.sessions / total) * 100;
-    const pctDisp = idx === 0 ? '100.0' : pct.toFixed(1);
-    const barW = Math.max(0.5, pct);
-    const bar  = $(`fb-${idx}`);
-    const pctEl = $(`fpct-${idx}`);
-    const abEl  = $(`fab-${idx}`);
-    if (bar)   bar.style.width = barW + '%';
-    if (pctEl) pctEl.textContent = pctDisp + '%';
-    if (abEl)  abEl.textContent = `↓ ${(100 - parseFloat(pctDisp)).toFixed(1)}% abandono`;
-  });
-  updateGargalo();
-}
-
-function updateGargalo() {
-  let maxDrop = 0, html = '—';
-  funilData.forEach((step, i) => {
-    if (i === 0) return;
-    const prev = funilData[i-1].sessions || 1;
-    const drop = ((prev - step.sessions) / prev) * 100;
-    if (drop > maxDrop) {
-      maxDrop = drop;
-      html = `De <strong>${funilData[i-1].label}</strong> → <strong>${step.label}</strong>: <strong>${drop.toFixed(1)}%</strong> de abandono (${prev - step.sessions} sessões perdidas). Esta é a maior oportunidade de otimização do funil.`;
-    }
-  });
-  $('gargalo-txt').innerHTML = html;
-}
-
-/* ═══════════════════════════════════
-   PRODUTOS
-═══════════════════════════════════ */
-function renderProd() {
-  const list = $('prod-list');
-  list.innerHTML = '';
-  prodData.forEach((p, i) => {
-    const row = document.createElement('div');
-    row.className = 'prod-row fu' + (i < 3 ? ' top' : '');
-    row.innerHTML = `
-      <span class="p-rank">${String(i+1).padStart(2,'0')}</span>
-      <span class="p-name" contenteditable="true"
-        onblur="prodData[${i}].nome=this.textContent.trim();ls.set('prod_v2',prodData)">${p.nome}</span>
-      <span class="p-stat" contenteditable="true"
-        onblur="prodData[${i}].vistos=parseInt(this.textContent)||0;ls.set('prod_v2',prodData)">${p.vistos}</span>
-      <span class="p-stat" contenteditable="true"
-        onblur="prodData[${i}].carrinho=parseInt(this.textContent)||0;ls.set('prod_v2',prodData)">${p.carrinho}</span>
-      <span class="p-stat" contenteditable="true"
-        onblur="prodData[${i}].vendidos=parseInt(this.textContent)||0;ls.set('prod_v2',prodData)">${p.vendidos}</span>
-      <span class="p-rev" contenteditable="true"
-        onblur="prodData[${i}].receita=parseMoney(this.textContent);ls.set('prod_v2',prodData)">${fmtBRL(p.receita)}</span>`;
-    list.appendChild(row);
-    setTimeout(() => row.classList.add('in'), 50 * i);
-  });
-}
-
-/* ═══════════════════════════════════
-   COLLABS — com cálculos automáticos
-   CPL = gasto / cliques
-   Eficiência = cliques / gasto * 100
-   CTR = cliques / alcance * 100
-═══════════════════════════════════ */
-function calcCollab(c) {
-  const cpl = c.cliques > 0 ? c.gasto / c.cliques : 0;
-  const ctr = c.alcance > 0 ? (c.cliques / c.alcance) * 100 : 0;
-  return { cpl, ctr };
-}
-
-function updateCollabCalcs(id) {
-  const c = collabData.find(x => x.id === id);
-  if (!c) return;
-  const { cpl, ctr } = calcCollab(c);
-  const cplEl = $(`cpl-${id}`);
-  const ctrEl = $(`ctr-${id}`);
-  if (cplEl) cplEl.textContent = cpl > 0 ? 'R$ ' + cpl.toFixed(2).replace('.',',') : '—';
-  if (ctrEl) ctrEl.textContent = ctr > 0 ? ctr.toFixed(2).replace('.',',') + '%' : '—';
-}
-
-function buildCollabCard(c) {
-  const { cpl, ctr } = calcCollab(c);
-  const card = document.createElement('div');
-  card.className = 'collab-card fu';
-  card.id = `cc-${c.id}`;
-
-  card.innerHTML = `
-    <div class="collab-head">
-      <div>
-        <div class="collab-name" contenteditable="true"
-          onblur="updateCollabField(${c.id},'nome',this.textContent.trim())">${c.nome}</div>
-        <div class="collab-role" contenteditable="true"
-          onblur="updateCollabField(${c.id},'role',this.textContent.trim())">${c.role}</div>
+      {/* Name */}
+      <div style={{
+        fontFamily: "'Syne', sans-serif",
+        fontSize: 'clamp(20px, 2.5vw, 28px)',
+        fontWeight: 800,
+        letterSpacing: '-0.02em',
+        lineHeight: 1.1,
+        marginBottom: 10,
+        color: 'var(--tx)',
+      }}>
+        {app.name}
       </div>
-      <button class="del-btn" onclick="deleteCollab(${c.id})">✕ Remover</button>
+
+      {/* Desc */}
+      <div style={{
+        fontSize: 13,
+        color: 'var(--dm)',
+        lineHeight: 1.65,
+        flex: 1,
+        marginBottom: 32,
+      }}>
+        {app.desc}
+      </div>
+
+      {/* CTA */}
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: hovered ? 14 : 8,
+        fontFamily: "'Syne', sans-serif",
+        fontSize: 10,
+        fontWeight: 700,
+        letterSpacing: '0.12em',
+        textTransform: 'uppercase',
+        color: hovered ? 'var(--or)' : 'var(--dm)',
+        transition: 'color 0.2s, gap 0.25s',
+      }}>
+        Acessar
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </div>
+    </a>
+  );
+}
+
+/* ── MAIN APP ─────────────────────────────────────────────── */
+function App() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 60);
+    return () => clearTimeout(t);
+  }, []);
+
+  const today = new Date().toLocaleDateString('pt-BR', {
+    weekday: 'long', day: 'numeric', month: 'long',
+  });
+
+  return (
+    <div style={{
+      minHeight: '100svh',
+      display: 'flex',
+      flexDirection: 'column',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Ambient background */}
+      <div style={{
+        position: 'fixed',
+        inset: 0,
+        pointerEvents: 'none',
+        zIndex: 0,
+        background: `
+          radial-gradient(ellipse 55% 45% at 85% 15%, rgba(255,77,0,.07) 0%, transparent 65%),
+          radial-gradient(ellipse 40% 50% at 10% 85%, rgba(255,77,0,.04) 0%, transparent 60%)
+        `,
+      }} />
+
+      {/* Subtle grid */}
+      <div style={{
+        position: 'fixed',
+        inset: 0,
+        pointerEvents: 'none',
+        zIndex: 0,
+        backgroundImage: `
+          linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px)
+        `,
+        backgroundSize: '80px 80px',
+        maskImage: 'radial-gradient(ellipse 85% 85% at center, black 20%, transparent 80%)',
+      }} />
+
+      {/* Content */}
+      <div style={{
+        position: 'relative',
+        zIndex: 1,
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 'clamp(24px, 5vw, 56px)',
+        maxWidth: 1280,
+        margin: '0 auto',
+        width: '100%',
+      }}>
+
+        {/* Top bar */}
+        <header
+          className="animate-up"
+          style={{
+            animationDelay: '0s',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 'clamp(56px, 10vw, 100px)',
+            paddingBottom: 24,
+            borderBottom: '1px solid var(--bd)',
+          }}
+        >
+          <div style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 13,
+            fontWeight: 700,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: 'var(--dm)',
+          }}>
+            K <span style={{ color: 'var(--or)', margin: '0 2px' }}>·</span> World
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <span style={{ fontSize: 11, color: 'var(--mt)', letterSpacing: '0.05em' }}>
+              {today}
+            </span>
+            <Clock />
+          </div>
+        </header>
+
+        {/* Hero text */}
+        <div style={{ marginBottom: 'clamp(40px, 7vw, 72px)' }}>
+          <div
+            className="animate-up"
+            style={{
+              animationDelay: '0.03s',
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.25em',
+              textTransform: 'uppercase',
+              color: 'var(--or)',
+              marginBottom: 16,
+            }}
+          >
+            Hub de Aplicações
+          </div>
+          <h1
+            className="animate-up"
+            style={{
+              animationDelay: '0.06s',
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 'clamp(40px, 8vw, 96px)',
+              fontWeight: 800,
+              lineHeight: 0.9,
+              letterSpacing: '-0.04em',
+              marginBottom: 20,
+            }}
+          >
+            Suas<br />
+            <span style={{
+              background: 'linear-gradient(90deg, var(--or) 0%, #ff7a40 50%, var(--or) 100%)',
+              backgroundSize: '200% auto',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              animation: 'shimmer 3s linear infinite',
+            }}>
+              aplicações.
+            </span>
+          </h1>
+          <p
+            className="animate-up"
+            style={{
+              animationDelay: '0.09s',
+              fontSize: 'clamp(14px, 1.8vw, 16px)',
+              color: 'var(--dm)',
+              maxWidth: 420,
+              lineHeight: 1.65,
+            }}
+          >
+            Tudo centralizado. Acesse qualquer ferramenta com um clique.
+          </p>
+        </div>
+
+        {/* Apps grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
+          gap: 2,
+          flex: 1,
+        }}>
+          {APPS.map((app, i) => (
+            <AppCard key={app.id} app={app} index={i} />
+          ))}
+        </div>
+
+        {/* Footer */}
+        <footer
+          className="animate-up"
+          style={{
+            animationDelay: '0.5s',
+            marginTop: 'clamp(40px, 6vw, 64px)',
+            paddingTop: 24,
+            borderTop: '1px solid var(--bd)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 12,
+          }}
+        >
+          <span style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'var(--mt)',
+          }}>
+            K <span style={{ color: 'var(--or)' }}>·</span> World
+          </span>
+          <span style={{ fontSize: 11, color: 'var(--mt)' }}>
+            {APPS.length} aplicações · hub pessoal
+          </span>
+        </footer>
+      </div>
     </div>
-    <div class="collab-stats">
-      <div>
-        <div class="cs-lbl">Alcance Total</div>
-        <div class="cs-val" contenteditable="true" inputmode="numeric"
-          onblur="updateCollabNum(${c.id},'alcance',this.textContent)">${c.alcance.toLocaleString('pt-BR')}</div>
-      </div>
-      <div>
-        <div class="cs-lbl">Cliques no Link</div>
-        <div class="cs-val" contenteditable="true" inputmode="numeric"
-          onblur="updateCollabNum(${c.id},'cliques',this.textContent)">${c.cliques.toLocaleString('pt-BR')}</div>
-      </div>
-      <div>
-        <div class="cs-lbl">Gasto (R$)</div>
-        <div class="cs-val" contenteditable="true" inputmode="numeric"
-          onblur="updateCollabNum(${c.id},'gasto',this.textContent)">${c.gasto.toLocaleString('pt-BR')}</div>
-      </div>
-      <div>
-        <div class="cs-lbl">Video View 25%</div>
-        <div class="cs-val" contenteditable="true" inputmode="numeric"
-          onblur="updateCollabNum(${c.id},'videoView',this.textContent)">${c.videoView.toLocaleString('pt-BR')}</div>
-      </div>
-      <div>
-        <div class="cs-lbl">CPL <span style="font-size:8px;opacity:.6">(gasto ÷ cliques)</span></div>
-        <div class="cs-computed" id="cpl-${c.id}">${cpl > 0 ? 'R$ ' + cpl.toFixed(2).replace('.',',') : '—'}</div>
-        <div class="cs-formula">calculado automaticamente</div>
-      </div>
-      <div>
-        <div class="cs-lbl">CTR <span style="font-size:8px;opacity:.6">(cliques ÷ alcance)</span></div>
-        <div class="cs-computed" id="ctr-${c.id}">${ctr > 0 ? ctr.toFixed(2).replace('.',',') + '%' : '—'}</div>
-        <div class="cs-formula">calculado automaticamente</div>
-      </div>
-    </div>`;
-
-  return card;
+  );
 }
 
-function renderCollabs() {
-  const grid = $('collabs-grid');
-  grid.innerHTML = '';
-  collabData.forEach(c => {
-    const card = buildCollabCard(c);
-    grid.appendChild(card);
-    setTimeout(() => card.classList.add('in'), 60);
-  });
-}
-
-function updateCollabField(id, field, val) {
-  const c = collabData.find(x => x.id === id);
-  if (c) { c[field] = val; ls.set('collab_v2', collabData); }
-}
-
-function updateCollabNum(id, field, rawText) {
-  const c = collabData.find(x => x.id === id);
-  if (!c) return;
-  const num = parseFloat(rawText.replace(/[^\d,\.]/g,'').replace(',','.')) || 0;
-  c[field] = num;
-  ls.set('collab_v2', collabData);
-  // reformat display
-  const el = event && event.target;
-  if (el) el.textContent = num.toLocaleString('pt-BR');
-  updateCollabCalcs(id);
-}
-
-function addCollab() {
-  const newC = {
-    id: nextId++,
-    nome: 'Nova Collab',
-    role: 'Clique para editar',
-    alcance: 0, cliques: 0, gasto: 0, videoView: 0
-  };
-  collabData.push(newC);
-  ls.set('collab_v2', collabData);
-  ls.set('collab_nid', nextId);
-
-  const grid = $('collabs-grid');
-  const card = buildCollabCard(newC);
-  grid.appendChild(card);
-  setTimeout(() => card.classList.add('in'), 30);
-
-  // Focus on name
-  setTimeout(() => {
-    const nameEl = card.querySelector('.collab-name');
-    if (nameEl) { nameEl.focus(); document.execCommand('selectAll'); }
-  }, 100);
-}
-
-function deleteCollab(id) {
-  if (!confirm('Remover esta collab?')) return;
-  collabData = collabData.filter(c => c.id !== id);
-  ls.set('collab_v2', collabData);
-  const card = $(`cc-${id}`);
-  if (card) { card.style.opacity = '0'; card.style.transform = 'scale(.95)'; card.style.transition = 'all .25s'; setTimeout(() => card.remove(), 250); }
-}
-
-/* ═══════════════════════════════════
-   LOOKER TABS
-═══════════════════════════════════ */
-function showTab(id, btn) {
-  ['vg','meta','google'].forEach(t => {
-    const el = $('tab-'+t);
-    if (el) el.style.display = 'none';
-  });
-  document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
-  const tab = $('tab-'+id);
-  if (tab) tab.style.display = 'block';
-  if (btn) btn.classList.add('active');
-  // lazy load
-  const iframe = tab && tab.querySelector('iframe');
-  if (iframe && iframe.dataset.src && !iframe.getAttribute('src')) iframe.src = iframe.dataset.src;
-}
-
-function hideLL(id) {
-  const el = $(id);
-  if (el) el.classList.add('gone');
-}
-
-/* ═══════════════════════════════════
-   NAV
-═══════════════════════════════════ */
-function toggleMenu() { $('mob-menu').classList.toggle('open'); }
-function closeMenu()  { $('mob-menu').classList.remove('open'); }
-
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) window.scrollTo({ top: target.offsetTop - 60, behavior:'smooth' });
-    closeMenu();
-  });
-});
-
-const allSec  = document.querySelectorAll('section');
-const allNav  = document.querySelectorAll('.nav-links a, .mobile-menu a');
-allSec.forEach(s => {
-  new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting)
-        allNav.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+e.target.id));
-    });
-  }, { threshold: 0.3 }).observe(s);
-});
-
-/* ═══════════════════════════════════
-   FADE OBSERVER
-═══════════════════════════════════ */
-const fuObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      fuObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.08 });
-
-/* ═══════════════════════════════════
-   INIT
-═══════════════════════════════════ */
-renderFat();
-renderFunil();
-renderProd();
-renderCollabs();
-
-setTimeout(() => {
-  document.querySelectorAll('.fu').forEach(el => fuObs.observe(el));
-}, 120);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
 </body>
 </html>
