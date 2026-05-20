@@ -249,6 +249,24 @@ footer { padding:clamp(24px,4vw,48px) var(--pad); display:flex; justify-content:
   .funil-right { width:100px; }
   .fi { width:68px; font-size:12px; }
 }
+
+/* ═══ HUB DE APPS ═══ */
+#hub { min-height:100svh; display:flex; flex-direction:column; justify-content:center; }
+.hub-eyebrow { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--or); margin-bottom:20px; position:relative; }
+.hub-title { font-family:'Syne',sans-serif; font-size:clamp(32px,6vw,72px); font-weight:800; line-height:.95; letter-spacing:-.035em; margin-bottom:20px; position:relative; }
+.hub-sub { font-size:14px; color:var(--dm); margin-bottom:52px; max-width:440px; line-height:1.65; position:relative; }
+.hub-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr)); gap:2px; position:relative; }
+.hub-card { display:flex; flex-direction:column; background:var(--s1); padding:clamp(24px,3.5vw,40px); color:var(--tx); transition:background .2s; position:relative; overflow:hidden; }
+.hub-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--or); transform:scaleX(0); transition:transform .35s; transform-origin:left; }
+.hub-card:hover { background:var(--s2); }
+.hub-card:hover::before { transform:scaleX(1); }
+.hub-card.current { border-left:2px solid var(--or); }
+.hub-card.current::before { transform:scaleX(1); }
+.hub-card-num { font-family:'Syne',sans-serif; font-size:9px; font-weight:700; letter-spacing:.18em; color:var(--mt); margin-bottom:28px; text-transform:uppercase; }
+.hub-card-name { font-family:'Syne',sans-serif; font-size:clamp(18px,2.5vw,24px); font-weight:800; letter-spacing:-.02em; margin-bottom:10px; }
+.hub-card-desc { font-size:12px; color:var(--dm); line-height:1.65; flex:1; margin-bottom:32px; }
+.hub-card-link { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--or); text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:gap .2s; width:fit-content; }
+.hub-card:hover .hub-card-link { gap:12px; }
 </style>
 </head>
 <body>
@@ -257,6 +275,7 @@ footer { padding:clamp(24px,4vw,48px) var(--pad); display:flex; justify-content:
 <nav>
   <div class="nav-logo">grupo <b>·</b> hapo</div>
   <ul class="nav-links">
+    <li><a href="#hub">Apps</a></li>
     <li><a href="#hero">Início</a></li>
     <li><a href="#visao">Visão</a></li>
     <li><a href="#fat">Faturamento</a></li>
@@ -271,6 +290,7 @@ footer { padding:clamp(24px,4vw,48px) var(--pad); display:flex; justify-content:
   </button>
 </nav>
 <div class="mobile-menu" id="mob-menu">
+  <a href="#hub" onclick="closeMenu()">Apps</a>
   <a href="#hero" onclick="closeMenu()">Início</a>
   <a href="#visao" onclick="closeMenu()">Visão Geral</a>
   <a href="#fat" onclick="closeMenu()">Faturamento</a>
@@ -280,6 +300,58 @@ footer { padding:clamp(24px,4vw,48px) var(--pad); display:flex; justify-content:
   <a href="#collabs" onclick="closeMenu()">Collabs</a>
   <a href="#prox" onclick="Próximos Passos">Próximos</a>
 </div>
+
+<!-- ═══ HUB DE APPS ═══ -->
+<section id="hub">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hub-eyebrow">K · World</div>
+  <h2 class="hub-title">Suas<br><span style="color:var(--or)">Aplicações</span></h2>
+  <p class="hub-sub">Acesse qualquer app em um clique. Todas as suas ferramentas, centralizadas aqui.</p>
+  <div class="hub-grid">
+
+    <div class="hub-card fu">
+      <div class="hub-card-num">01 · App</div>
+      <div class="hub-card-name">fourseconds</div>
+      <div class="hub-card-desc">Aplicação web disponível online.</div>
+      <a href="https://kvothedarinha.github.io/fourseconds" target="_blank" rel="noopener" class="hub-card-link">
+        Acessar
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+
+    <div class="hub-card fu">
+      <div class="hub-card-num">02 · App</div>
+      <div class="hub-card-name">highmarketing</div>
+      <div class="hub-card-desc">Aplicação web disponível online.</div>
+      <a href="https://kvothedarinha.github.io/highmarketing" target="_blank" rel="noopener" class="hub-card-link">
+        Acessar
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+
+    <div class="hub-card fu">
+      <div class="hub-card-num">03 · App</div>
+      <div class="hub-card-name">pontodasrimas</div>
+      <div class="hub-card-desc">Aplicação web disponível online.</div>
+      <a href="https://kvothedarinha.github.io/pontodasrimas" target="_blank" rel="noopener" class="hub-card-link">
+        Acessar
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+
+    <div class="hub-card current fu">
+      <div class="hub-card-num">04 · Relatório</div>
+      <div class="hub-card-name">Oceano Surfwear</div>
+      <div class="hub-card-desc">Relatório de Growth Marketing — você já está aqui.</div>
+      <a href="#hero" class="hub-card-link" style="color:var(--tx)">
+        Ver relatório
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 19 19 12"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
 
 <!-- ═══ HERO ═══ -->
 <section id="hero">
