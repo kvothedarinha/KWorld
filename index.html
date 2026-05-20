@@ -4,421 +4,479 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>K·World</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400;1,9..144,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400&display=swap" rel="stylesheet">
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html, body, #root { min-height: 100%; }
-
-:root {
-  --bg:     #0b0905;
-  --s1:     #141008;
-  --s2:     #1c160e;
-  --bd:     rgba(200,169,110,.12);
-  --bd2:    rgba(200,169,110,.22);
-  --am:     #c8a96e;
-  --am-dim: rgba(200,169,110,.1);
-  --tx:     #e8dfc8;
-  --mt:     #6b5f45;
-  --dm:     #9b8c72;
-}
+html, body, #root { width: 100%; height: 100%; }
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--tx);
-  overflow-x: hidden;
+  background: linear-gradient(180deg, #6ab8d8 0%, #8ecce8 18%, #aadaf2 40%, #c4e9f7 65%, #daf2fb 85%, #edf8fd 100%);
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* grain overlay */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9000;
-  opacity: .028;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
+/* Island float */
+@keyframes floatIsland {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-14px); }
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: none; }
+/* Cloud drifts */
+@keyframes d1 {
+  0%,100% { transform: translate(0px,0px); }
+  30%     { transform: translate(22px,-9px); }
+  65%     { transform: translate(-14px,6px); }
 }
-@keyframes slowRotate {
-  to { transform: rotate(360deg); }
+@keyframes d2 {
+  0%,100% { transform: translate(0px,0px); }
+  35%     { transform: translate(-26px,8px); }
+  68%     { transform: translate(16px,-11px); }
+}
+@keyframes d3 {
+  0%,100% { transform: translate(0px,0px); }
+  50%     { transform: translate(18px,-13px); }
 }
 
-.up { animation: fadeUp .55s cubic-bezier(.22,1,.36,1) both; }
+/* Cards */
+@keyframes cardIn {
+  from { opacity:0; transform: translateY(28px) scale(0.95); }
+  to   { opacity:1; transform: none; }
+}
+@keyframes overlayIn {
+  from { opacity:0; backdrop-filter: blur(0px); }
+  to   { opacity:1; backdrop-filter: blur(8px); }
+}
+@keyframes hintPulse {
+  0%,100% { opacity: .55; }
+  50%     { opacity: .9; }
+}
+
+.d1  { animation: d1 20s ease-in-out infinite; }
+.d2  { animation: d2 16s ease-in-out infinite; }
+.d3  { animation: d3 26s ease-in-out infinite; }
+.d1b { animation: d1 18s ease-in-out 5s infinite; }
+.d2b { animation: d2 22s ease-in-out 3s infinite; }
+.d3b { animation: d3 14s ease-in-out 8s infinite; }
+
+.hint { animation: hintPulse 3s ease-in-out infinite; }
 </style>
 </head>
 <body>
 <div id="root"></div>
-
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
+/* ─── DATA ──────────────────────────────────────────────── */
 const APPS = [
   {
-    id: 1,
-    name: 'fourseconds',
+    id: 1, name: 'fourseconds',
     tagline: 'quatro segundos para respirar',
     url: 'https://fourseconds.lovable.app/',
     favicon: 'https://fourseconds.lovable.app/favicon.ico',
   },
   {
-    id: 2,
-    name: 'highmarketing',
+    id: 2, name: 'highmarketing',
     tagline: 'estratégia que conecta pessoas',
     url: 'https://highmarketing.lovable.app/',
     favicon: 'https://highmarketing.lovable.app/favicon.ico',
   },
   {
-    id: 3,
-    name: 'pontodasrimas',
+    id: 3, name: 'pontodasrimas',
     tagline: 'onde as palavras encontram ritmo',
     url: 'https://pontodasrimas.lovable.app/',
     favicon: 'https://pontodasrimas.lovable.app/favicon.ico',
   },
   {
-    id: 4,
-    name: 'Oceano Surfwear',
+    id: 4, name: 'Oceano Surfwear',
     tagline: 'crescimento com propósito',
     url: './relatorio-oceano.html',
     favicon: null,
   },
 ];
 
-/* ── FAVICON ──────────────────────────────────── */
-function AppLogo({ src, name }) {
-  const [err, setErr] = useState(false);
-
-  if (!src || err) {
-    return (
-      <div style={{
-        width: 52, height: 52,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 22,
-        fontFamily: "'Fraunces', serif",
-        fontStyle: 'italic',
-        color: 'var(--am)',
-        opacity: .7,
-      }}>
-        {name[0].toUpperCase()}
-      </div>
-    );
-  }
-
+/* ─── CLOUD SHAPE (SVG ellipses, no blur) ────────────────── */
+function CloudShape({ w, h, tint = 'white' }) {
   return (
-    <img
-      src={src}
-      alt={name}
-      onError={() => setErr(true)}
-      style={{ width: 52, height: 52, objectFit: 'contain', borderRadius: 10, display: 'block' }}
-    />
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} overflow="visible" style={{ display:'block' }}>
+      <ellipse cx={w*.50} cy={h*.68} rx={w*.44} ry={h*.42} fill={tint}/>
+      <ellipse cx={w*.22} cy={h*.74} rx={w*.30} ry={h*.36} fill={tint}/>
+      <ellipse cx={w*.78} cy={h*.71} rx={w*.34} ry={h*.38} fill={tint}/>
+      <ellipse cx={w*.38} cy={h*.38} rx={w*.28} ry={h*.36} fill={tint}/>
+      <ellipse cx={w*.62} cy={h*.34} rx={w*.26} ry={h*.34} fill={tint}/>
+      <ellipse cx={w*.50} cy={h*.22} rx={w*.20} ry={h*.28} fill={tint}/>
+    </svg>
   );
 }
 
-/* ── APP CARD ─────────────────────────────────── */
-function AppCard({ app, delay }) {
+/* ─── CLOUD GROUP (parallax outer + drift inner) ─────────── */
+function Cloud({ x, y, w, h, driftClass, depth, mouse, opacity = 1, tint = 'white' }) {
+  return (
+    <div style={{
+      position: 'absolute',
+      left: `${x}%`, top: `${y}%`,
+      width: w, height: h,
+      opacity,
+      transform: `translate(${mouse.x * depth * 32}px, ${mouse.y * depth * 16}px)`,
+      transition: 'transform 1.4s ease-out',
+      pointerEvents: 'none',
+      willChange: 'transform',
+    }}>
+      <div className={driftClass}>
+        <CloudShape w={w} h={h} tint={tint}/>
+      </div>
+    </div>
+  );
+}
+
+/* ─── ISLAND SVG ─────────────────────────────────────────── */
+function Island({ onHouseClick }) {
   const [hov, setHov] = useState(false);
 
+  return (
+    <svg viewBox="0 0 400 460" style={{ width:'100%', height:'100%', overflow:'visible' }}>
+      <defs>
+        <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stopColor="#848070"/>
+          <stop offset="55%" stopColor="#6e6a5c"/>
+          <stop offset="100%" stopColor="#565046"/>
+        </linearGradient>
+        <linearGradient id="rockL" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"  stopColor="rgba(0,0,0,.15)"/>
+          <stop offset="100%" stopColor="transparent"/>
+        </linearGradient>
+        <linearGradient id="rockR" x1="1" y1="0" x2="0" y2="0">
+          <stop offset="0%"  stopColor="rgba(0,0,0,.12)"/>
+          <stop offset="100%" stopColor="transparent"/>
+        </linearGradient>
+        <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stopColor="#7ec050"/>
+          <stop offset="100%" stopColor="#52922c"/>
+        </linearGradient>
+        <radialGradient id="mist" cx="50%" cy="0%" r="70%">
+          <stop offset="0%"  stopColor="white" stopOpacity=".75"/>
+          <stop offset="100%" stopColor="white" stopOpacity="0"/>
+        </radialGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="5" result="b"/>
+          <feComposite in="SourceGraphic" in2="b" operator="over"/>
+        </filter>
+      </defs>
+
+      {/* ── ROCK BODY ── */}
+      <path d="M 116,195 C 112,220 109,248 108,278 C 107,308 108,340 110,368 C 113,390 118,412 124,432 Q 162,450 200,452 Q 238,450 276,432 C 282,412 287,390 290,368 C 292,340 293,308 292,278 C 291,248 288,220 284,195 Z" fill="url(#rock)"/>
+      {/* Left shadow face */}
+      <path d="M 116,195 C 112,220 109,248 108,278 C 107,308 108,340 110,368 C 113,390 118,412 124,432 Q 162,450 200,452 L 200,195 Z" fill="url(#rockL)"/>
+      {/* Right shadow face */}
+      <path d="M 284,195 C 288,220 291,248 292,278 C 293,308 292,340 290,368 C 287,390 282,412 276,432 Q 238,450 200,452 L 200,195 Z" fill="url(#rockR)"/>
+      {/* Rock striations */}
+      {[230,268,308,346,385].map((y,i) => (
+        <line key={i} x1={108+i*2} y1={y} x2={292-i*2} y2={y} stroke="rgba(0,0,0,.06)" strokeWidth="1.5"/>
+      ))}
+      {/* Rock highlight edge left */}
+      <path d="M 118,198 C 114,225 111,255 110,285 C 109,315 110,348 113,375" stroke="rgba(255,255,255,.09)" strokeWidth="3" fill="none" strokeLinecap="round"/>
+
+      {/* ── GRASS DOME ── */}
+      <ellipse cx="200" cy="198" rx="88"  ry="38"  fill="#52922c"/>
+      <ellipse cx="200" cy="194" rx="84"  ry="34"  fill="url(#grass)"/>
+      <ellipse cx="200" cy="190" rx="76"  ry="26"  fill="#8ecf5a" opacity=".55"/>
+
+      {/* ── TRAIL ── */}
+      <path d="M 200,196 C 203,212 207,232 210,254 C 213,277 216,302 218,328 C 220,352 221,378 222,402" stroke="rgba(90,72,48,.38)" strokeWidth="3" fill="none" strokeLinecap="round" strokeDasharray="6,5"/>
+
+      {/* ── TREES ── */}
+      {/* left big */}
+      <rect x="145" y="171" width="5" height="20" rx="2" fill="#4a2e0e"/>
+      <ellipse cx="148" cy="157" rx="21" ry="26" fill="#2d5c1e"/>
+      <ellipse cx="148" cy="152" rx="18" ry="22" fill="#3a7028"/>
+      {/* left small */}
+      <rect x="162" y="174" width="4" height="14" rx="1" fill="#4a2e0e"/>
+      <ellipse cx="164" cy="164" rx="14" ry="18" fill="#3a7028"/>
+      {/* right big */}
+      <rect x="250" y="169" width="5" height="22" rx="2" fill="#4a2e0e"/>
+      <ellipse cx="253" cy="154" rx="23" ry="28" fill="#2d5c1e"/>
+      <ellipse cx="253" cy="149" rx="19" ry="23" fill="#3a7028"/>
+      {/* right small */}
+      <rect x="235" y="172" width="4" height="15" rx="1" fill="#4a2e0e"/>
+      <ellipse cx="237" cy="163" rx="13" ry="17" fill="#3a7028"/>
+
+      {/* ── HOUSE ── */}
+      <g
+        onClick={onHouseClick}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+        style={{
+          cursor: 'pointer',
+          filter: hov ? 'drop-shadow(0 0 10px rgba(255,225,120,.9)) drop-shadow(0 0 22px rgba(255,180,60,.5))' : 'none',
+          transform: hov ? 'translateY(-3px)' : 'none',
+          transition: 'filter .3s, transform .3s',
+          transformOrigin: '200px 148px',
+        }}
+      >
+        {/* Body */}
+        <rect x="179" y="148" width="42" height="38" fill="#f2ede4" rx="2"/>
+        {/* Roof */}
+        <polygon points="171,151 229,151 200,120" fill="#c0503a"/>
+        <polygon points="171,151 200,120 200,151" fill="rgba(0,0,0,.1)"/>
+        {/* Chimney */}
+        <rect x="215" y="125" width="8" height="24" fill="#a84232" rx="1"/>
+        <rect x="213" y="123" width="12" height="4"  fill="#c0503a" rx="1"/>
+        {/* Smoke */}
+        <circle cx="219" cy="116" r="4.5" fill="rgba(255,255,255,.55)"/>
+        <circle cx="214" cy="108" r="3.5" fill="rgba(255,255,255,.38)"/>
+        <circle cx="221" cy="101" r="2.8" fill="rgba(255,255,255,.22)"/>
+        {/* Left window */}
+        <rect x="184" y="155" width="11" height="11" fill="#9ec8e0" rx="1"/>
+        <line x1="189.5" y1="155" x2="189.5" y2="166" stroke="rgba(255,255,255,.7)" strokeWidth=".8"/>
+        <line x1="184"   y1="160.5" x2="195"  y2="160.5" stroke="rgba(255,255,255,.7)" strokeWidth=".8"/>
+        {/* Right window */}
+        <rect x="205" y="155" width="11" height="11" fill="#9ec8e0" rx="1"/>
+        <line x1="210.5" y1="155" x2="210.5" y2="166" stroke="rgba(255,255,255,.7)" strokeWidth=".8"/>
+        <line x1="205"   y1="160.5" x2="216"  y2="160.5" stroke="rgba(255,255,255,.7)" strokeWidth=".8"/>
+        {/* Door */}
+        <rect x="192" y="165" width="12" height="21" fill="#8b6e42" rx="1"/>
+        <path d="M 192,168 Q 198,162 204,168" fill="#7a5e34"/>
+        <circle cx="203" cy="176" r="1.4" fill="#d4a030"/>
+        {/* Hover ring */}
+        {hov && <circle cx="200" cy="150" r="48" fill="none" stroke="rgba(255,220,100,.35)" strokeWidth="1.5" strokeDasharray="5,4"/>}
+      </g>
+
+      {/* ── BASE MIST ── */}
+      <ellipse cx="200" cy="445" rx="155" ry="28" fill="white" opacity=".6"/>
+      <ellipse cx="200" cy="452" rx="180" ry="24" fill="white" opacity=".7"/>
+      <ellipse cx="155" cy="448" rx="100" ry="22" fill="white" opacity=".4"/>
+      <ellipse cx="248" cy="446" rx="95"  ry="20" fill="white" opacity=".4"/>
+    </svg>
+  );
+}
+
+/* ─── APP FAVICON ─────────────────────────────────────────── */
+function Favicon({ src, name, size = 52 }) {
+  const [err, setErr] = useState(false);
+  if (!src || err) return (
+    <div style={{
+      width: size, height: size,
+      borderRadius: 12,
+      background: 'rgba(110,184,220,.15)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: "'Fraunces',serif", fontStyle: 'italic',
+      fontSize: size * .44, color: '#5aaac8',
+    }}>
+      {name[0].toUpperCase()}
+    </div>
+  );
+  return <img src={src} alt={name} onError={() => setErr(true)} style={{ width: size, height: size, objectFit: 'contain', borderRadius: 12, display: 'block' }}/>;
+}
+
+/* ─── APP CARD ────────────────────────────────────────────── */
+function AppCard({ app, idx }) {
+  const [hov, setHov] = useState(false);
   return (
     <a
       href={app.url}
       target={app.url.startsWith('http') ? '_blank' : '_self'}
       rel="noopener noreferrer"
-      className="up"
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        animationDelay: delay,
-        display: 'flex',
-        flexDirection: 'column',
-        textDecoration: 'none',
-        color: 'inherit',
-        background: hov ? 'var(--s2)' : 'var(--s1)',
-        border: `1px solid ${hov ? 'var(--bd2)' : 'var(--bd)'}`,
-        borderRadius: 14,
-        padding: 'clamp(24px,3.5vw,36px)',
-        transition: 'background .25s, border-color .25s, box-shadow .3s, transform .2s',
+        display: 'flex', flexDirection: 'column',
+        textDecoration: 'none', color: '#233040',
+        background: hov ? 'rgba(255,255,255,.97)' : 'rgba(255,255,255,.86)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        border: '1px solid rgba(255,255,255,.72)',
+        borderRadius: 20,
+        padding: '24px 22px 20px',
+        width: 'clamp(150px,38vw,200px)',
         boxShadow: hov
-          ? '0 0 0 1px rgba(200,169,110,.1), 0 24px 64px rgba(0,0,0,.55)'
-          : '0 1px 2px rgba(0,0,0,.3)',
-        transform: hov ? 'translateY(-3px)' : 'none',
+          ? '0 20px 60px rgba(80,150,200,.22), 0 4px 16px rgba(0,0,0,.08)'
+          : '0 8px 32px rgba(80,150,200,.12), 0 2px 8px rgba(0,0,0,.06)',
+        transform: hov ? 'translateY(-5px) scale(1.02)' : 'none',
+        transition: 'all .25s ease',
         cursor: 'pointer',
-        position: 'relative',
-        overflow: 'hidden',
+        animation: `cardIn .5s cubic-bezier(.22,1,.36,1) ${idx * .09}s both`,
       }}
     >
-      {/* Warm glow on hover */}
-      {hov && (
-        <div style={{
-          position: 'absolute',
-          bottom: -40, left: -40,
-          width: 160, height: 160,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(200,169,110,.06) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-      )}
-
-      {/* Logo */}
-      <div style={{ marginBottom: 20 }}>
-        <AppLogo src={app.favicon} name={app.name} />
-      </div>
-
-      {/* Name */}
+      <div style={{ marginBottom: 14 }}><Favicon src={app.favicon} name={app.name}/></div>
       <div style={{
-        fontFamily: "'Fraunces', serif",
-        fontStyle: 'italic',
-        fontSize: 'clamp(18px,2.2vw,22px)',
-        fontWeight: 400,
-        letterSpacing: '-.01em',
-        color: 'var(--tx)',
-        marginBottom: 8,
-        lineHeight: 1.2,
+        fontFamily: "'Fraunces',serif", fontStyle: 'italic',
+        fontSize: 16, fontWeight: 400, marginBottom: 6, lineHeight: 1.2,
       }}>
         {app.name}
       </div>
-
-      {/* Tagline */}
-      <div style={{
-        fontSize: 12,
-        color: 'var(--mt)',
-        lineHeight: 1.6,
-        flex: 1,
-        marginBottom: 24,
-        fontWeight: 300,
-        letterSpacing: '.02em',
-      }}>
+      <div style={{ fontSize: 11, color: '#7090a8', fontWeight: 300, lineHeight: 1.6, flex: 1, marginBottom: 16 }}>
         {app.tagline}
       </div>
-
-      {/* CTA */}
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 6,
-        fontSize: 11,
-        fontFamily: "'Fraunces', serif",
-        fontStyle: 'italic',
-        color: hov ? 'var(--am)' : 'var(--dm)',
+        fontSize: 11, fontFamily: "'Fraunces',serif", fontStyle: 'italic',
+        color: hov ? '#5aaac8' : '#a0bccb',
+        display: 'flex', alignItems: 'center', gap: 5,
         transition: 'color .2s',
-        letterSpacing: '.03em',
       }}>
         entrar
-        <svg
-          width="11" height="11"
-          viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" strokeWidth="2"
-          strokeLinecap="round"
-          style={{ transform: hov ? 'translateX(3px)' : 'none', transition: 'transform .2s' }}
-        >
-          <line x1="5" y1="12" x2="19" y2="12"/>
-          <polyline points="12 5 19 12 12 19"/>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
         </svg>
       </div>
     </a>
   );
 }
 
-/* ── BACKGROUND WORLD ─────────────────────────── */
-function WorldBg() {
+/* ─── CARDS OVERLAY ──────────────────────────────────────── */
+function Overlay({ onClose }) {
   return (
-    <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
-      {/* Warm radial light */}
-      <div style={{
-        position: 'absolute',
-        top: '30%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 700, height: 700,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(200,169,110,.055) 0%, transparent 65%)',
-      }} />
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 200,
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        padding: 24,
+        background: 'rgba(140,210,240,.18)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        animation: 'overlayIn .35s ease both',
+      }}
+    >
+      <p onClick={e => e.stopPropagation()} style={{
+        fontFamily: "'Fraunces',serif", fontStyle: 'italic', fontWeight: 300,
+        fontSize: 'clamp(13px,2.5vw,17px)', color: 'rgba(255,255,255,.92)',
+        marginBottom: 24, letterSpacing: '.05em',
+        textShadow: '0 2px 12px rgba(40,100,140,.4)',
+        animation: 'cardIn .4s ease both',
+      }}>
+        escolha um portal
+      </p>
 
-      {/* Topographic rings */}
-      {[180, 300, 420, 540, 660, 780].map((r, i) => (
-        <div key={i} style={{
-          position: 'absolute',
-          top: '30%', left: '50%',
-          width: r, height: r,
-          marginTop: -r/2, marginLeft: -r/2,
-          borderRadius: '50%',
-          border: `1px solid rgba(200,169,110,${0.055 - i * 0.007})`,
-        }} />
-      ))}
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          display: 'flex', flexWrap: 'wrap',
+          gap: 'clamp(10px,2vw,14px)',
+          justifyContent: 'center', maxWidth: 860,
+        }}
+      >
+        {APPS.map((app, i) => <AppCard key={app.id} app={app} idx={i}/>)}
+      </div>
 
-      {/* Scattered dots — stars / seeds */}
-      {[
-        [12,18],[88,8],[25,72],[75,55],[60,20],[40,85],
-        [92,40],[5,50],[55,90],[80,75],[18,35],[68,10],
-      ].map(([x, y], i) => (
-        <div key={i} style={{
-          position: 'absolute',
-          left: `${x}%`, top: `${y}%`,
-          width: 2, height: 2,
-          borderRadius: '50%',
-          background: `rgba(200,169,110,${0.12 + (i % 3) * 0.06})`,
-        }} />
-      ))}
+      <p style={{
+        marginTop: 28, fontSize: 11,
+        color: 'rgba(255,255,255,.45)',
+        fontFamily: "'Fraunces',serif", fontStyle: 'italic',
+        letterSpacing: '.06em', cursor: 'pointer',
+        animation: 'cardIn .5s .4s ease both',
+      }}>
+        clique fora para voltar
+      </p>
     </div>
   );
 }
 
-/* ── CLOCK ────────────────────────────────────── */
-function Clock() {
-  const [t, setT] = useState(new Date());
+/* ─── MAIN APP ───────────────────────────────────────────── */
+function App() {
+  const [showCards, setShowCards] = useState(false);
+  const mouseRef  = useRef({ x: 0, y: 0 });
+  const targetRef = useRef({ x: 0, y: 0 });
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const rafRef = useRef();
+
+  /* smooth parallax loop */
   useEffect(() => {
-    const id = setInterval(() => setT(new Date()), 1000);
-    return () => clearInterval(id);
+    const tick = () => {
+      mouseRef.current.x += (targetRef.current.x - mouseRef.current.x) * .055;
+      mouseRef.current.y += (targetRef.current.y - mouseRef.current.y) * .055;
+      setMouse({ ...mouseRef.current });
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
+  const onMove = e => {
+    targetRef.current = {
+      x: (e.clientX / window.innerWidth  - .5) * 2,
+      y: (e.clientY / window.innerHeight - .5) * 2,
+    };
+  };
+
+  /* ── cloud definitions ── */
+  const bgClouds = [
+    { id:'b1', x:-8,  y:8,  w:380, h:220, driftClass:'d2',  depth:.3, opacity:.52 },
+    { id:'b2', x:68,  y:-6, w:420, h:240, driftClass:'d3',  depth:.25, opacity:.42 },
+    { id:'b3', x:78,  y:5,  w:360, h:200, driftClass:'d1b', depth:.28, opacity:.45 },
+    { id:'b4', x:-5,  y:38, w:300, h:180, driftClass:'d3b', depth:.22, opacity:.40 },
+  ];
+  const fgClouds = [
+    { id:'f1', x:-14, y:55, w:520, h:310, driftClass:'d1',  depth:.7, opacity:.94 },
+    { id:'f2', x:28,  y:65, w:580, h:340, driftClass:'d2',  depth:.6, opacity:.97 },
+    { id:'f3', x:66,  y:58, w:490, h:290, driftClass:'d3',  depth:.65, opacity:.90 },
+    { id:'f4', x:-8,  y:45, w:380, h:240, driftClass:'d2b', depth:.55, opacity:.82 },
+    { id:'f5', x:75,  y:44, w:400, h:250, driftClass:'d1b', depth:.60, opacity:.80 },
+    { id:'f6', x:38,  y:75, w:460, h:260, driftClass:'d3b', depth:.50, opacity:.88 },
+  ];
+
   return (
-    <span style={{
-      fontFamily: "'Fraunces', serif",
-      fontStyle: 'italic',
-      fontSize: 13,
-      color: 'var(--mt)',
-      letterSpacing: '.03em',
-    }}>
-      {String(t.getHours()).padStart(2,'0')}
-      <span style={{ opacity: .4 }}>:</span>
-      {String(t.getMinutes()).padStart(2,'0')}
-    </span>
-  );
-}
+    <div
+      onMouseMove={onMove}
+      style={{ position:'fixed', inset:0, overflow:'hidden' }}
+    >
+      {/* ── BG CLOUDS ── */}
+      <div style={{ position:'absolute', inset:'-12% -8%', zIndex:1 }}>
+        {bgClouds.map(c => <Cloud key={c.id} {...c} mouse={mouse}/>)}
+      </div>
 
-/* ── APP ──────────────────────────────────────── */
-function App() {
-  const date = new Date().toLocaleDateString('pt-BR', {
-    weekday: 'long', day: 'numeric', month: 'long'
-  });
-
-  return (
-    <div style={{ position: 'relative', zIndex: 1, minHeight: '100svh', display: 'flex', flexDirection: 'column' }}>
-      <WorldBg />
-
+      {/* ── ISLAND ── */}
       <div style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: 'clamp(32px,6vw,72px) clamp(24px,6vw,80px)',
-        maxWidth: 1100,
-        margin: '0 auto',
-        width: '100%',
+        position:'absolute', inset:0, zIndex:2,
+        display:'flex', alignItems:'center', justifyContent:'center',
       }}>
-
-        {/* Header */}
-        <header className="up" style={{ animationDelay: '0s', marginBottom: 'clamp(48px,8vw,80px)' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingBottom: 20,
-            borderBottom: '1px solid var(--bd)',
-          }}>
-            <div style={{
-              fontFamily: "'Fraunces', serif",
-              fontStyle: 'italic',
-              fontSize: 14,
-              fontWeight: 300,
-              color: 'var(--dm)',
-              letterSpacing: '.04em',
-            }}>
-              k<span style={{ color: 'var(--am)', margin: '0 1px' }}>·</span>world
-            </div>
-            <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-              <span style={{ fontSize: 11, color: 'var(--mt)', fontWeight: 300 }}>{date}</span>
-              <Clock />
-            </div>
-          </div>
-        </header>
-
-        {/* Hero */}
-        <div style={{ marginBottom: 'clamp(48px,7vw,72px)' }}>
-          <h1
-            className="up"
-            style={{
-              animationDelay: '.05s',
-              fontFamily: "'Fraunces', serif",
-              fontStyle: 'italic',
-              fontWeight: 300,
-              fontSize: 'clamp(52px,10vw,120px)',
-              lineHeight: .88,
-              letterSpacing: '-.04em',
-              color: 'var(--tx)',
-              marginBottom: 20,
-            }}
-          >
-            um mundo<br />
-            <span style={{ color: 'var(--am)', fontWeight: 400 }}>só seu.</span>
-          </h1>
-          <p
-            className="up"
-            style={{
-              animationDelay: '.1s',
-              fontSize: 14,
-              color: 'var(--mt)',
-              fontWeight: 300,
-              lineHeight: 1.7,
-              maxWidth: 340,
-              letterSpacing: '.02em',
-            }}
-          >
-            cada portal, um novo horizonte.
-          </p>
-        </div>
-
-        {/* Grid */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 220px), 1fr))',
-          gap: 'clamp(10px,1.5vw,16px)',
+          width: 'clamp(240px,44vw,460px)',
+          animation: 'floatIsland 7s ease-in-out infinite',
+          transform: `translate(${mouse.x*9}px, ${mouse.y*5}px)`,
+          transition: 'transform 1.8s ease-out',
+          willChange: 'transform',
         }}>
-          {APPS.map((app, i) => (
-            <AppCard
-              key={app.id}
-              app={app}
-              delay={`${.15 + i * .07}s`}
-            />
-          ))}
+          <Island onHouseClick={() => setShowCards(true)}/>
         </div>
+      </div>
 
-        {/* Footer */}
-        <footer
-          className="up"
-          style={{
-            animationDelay: '.55s',
-            marginTop: 'clamp(40px,6vw,64px)',
-            paddingTop: 20,
-            borderTop: '1px solid var(--bd)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 10,
-          }}
-        >
-          <span style={{
-            fontFamily: "'Fraunces', serif",
-            fontStyle: 'italic',
-            fontSize: 12,
-            color: 'var(--mt)',
+      {/* ── FG CLOUDS ── */}
+      <div style={{ position:'absolute', inset:'-12% -8%', zIndex:3, pointerEvents:'none' }}>
+        {fgClouds.map(c => <Cloud key={c.id} {...c} mouse={mouse}/>)}
+      </div>
+
+      {/* ── BRAND + HINT ── */}
+      {!showCards && (
+        <div style={{
+          position:'absolute', bottom:'clamp(18px,3vw,32px)',
+          left:'50%', transform:'translateX(-50%)',
+          zIndex:5, textAlign:'center', pointerEvents:'none',
+        }}>
+          <div style={{
+            fontFamily:"'Fraunces',serif", fontStyle:'italic',
+            fontSize:'clamp(11px,1.6vw,14px)',
+            color:'rgba(60,110,150,.65)', letterSpacing:'.07em',
+            marginBottom: 5,
+          }}>
+            k<span style={{ color:'rgba(80,140,180,.7)' }}>·</span>world
+          </div>
+          <div className="hint" style={{
+            fontSize:'clamp(9px,1.3vw,11px)',
+            color:'rgba(60,110,150,.5)',
+            fontFamily:"'Fraunces',serif", fontStyle:'italic',
             fontWeight: 300,
           }}>
-            k<span style={{ color: 'var(--am)' }}>·</span>world
-          </span>
-          <span style={{ fontSize: 11, color: 'var(--mt)', fontWeight: 300, letterSpacing: '.04em' }}>
-            {APPS.length} portais abertos
-          </span>
-        </footer>
-      </div>
+            clique na casa para entrar
+          </div>
+        </div>
+      )}
+
+      {/* ── OVERLAY ── */}
+      {showCards && <Overlay onClose={() => setShowCards(false)}/>}
     </div>
   );
 }
